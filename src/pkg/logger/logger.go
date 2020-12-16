@@ -1,135 +1,101 @@
 package logger
 
 import (
-	"fmt"
-	"github.com/phachon/go-logger"
-	"litshop/src/config"
-	"litshop/src/pkg/path"
-	"time"
+	"github.com/sirupsen/logrus"
 )
 
-var (
-	logger    *go_logger.Logger
-	asyncMode bool
-)
+func WithFields(fields logrus.Fields) *logrus.Entry {
+	return log.WithFields(fields)
+}
 
-func init() {
-	logger = go_logger.NewLogger()
-	asyncMode = false
-
-	if config.GetBool("log.async") == true {
-		asyncMode = true
-	}
-
-	logPath := path.StoragePath() + "/logs/"
-	logFile := logPath + "app.log"
-
-	fileConfig := &go_logger.FileConfig{
-		Filename: logFile,
-		LevelFileName: map[int]string{
-			logger.LoggerLevel("error"): logPath + "error.log",
-		},
-		MaxSize:    1024 * 1024,
-		MaxLine:    10000,
-		DateSlice:  "d",
-		JsonFormat: config.GetString("log.format") == "json",
-		Format:     "%millisecond_format% [%level_string%] [%file%:%line%] %body%",
-	}
-
-	var level int = go_logger.LOGGER_LEVEL_DEBUG
-	switch config.GetString("log.level") {
-	case "info":
-		level = go_logger.LOGGER_LEVEL_DEBUG
-	case "warning":
-		level = go_logger.LOGGER_LEVEL_WARNING
-	case "error":
-		level = go_logger.LOGGER_LEVEL_ERROR
-	case "critical":
-		level = go_logger.LOGGER_LEVEL_CRITICAL
-	}
-
-	_ = logger.Attach("file", level, fileConfig)
-	if asyncMode {
-		logger.SetAsync()
-
-		go func() {
-			for range time.Tick(time.Minute) {
-				Flush()
-			}
-		}()
+func Logf(level logrus.Level, format string, args ...interface{}) {
+	if log.IsLevelEnabled(level) {
+		log.Logf(level, format, args...)
 	}
 }
 
-func Emergency(msg string) {
-	_ = logger.Writer(go_logger.LOGGER_LEVEL_EMERGENCY, msg)
+func Tracef(format string, args ...interface{}) {
+	log.Logf(logrus.TraceLevel, format, args...)
 }
 
-func Emergencyf(format string, a ...interface{}) {
-	msg := fmt.Sprintf(format, a...)
-	_ = logger.Writer(go_logger.LOGGER_LEVEL_EMERGENCY, msg)
+func Debugf(format string, args ...interface{}) {
+	log.Logf(logrus.DebugLevel, format, args...)
 }
 
-func Alert(msg string) {
-	_ = logger.Writer(go_logger.LOGGER_LEVEL_ALERT, msg)
+func Infof(format string, args ...interface{}) {
+	log.Logf(logrus.InfoLevel, format, args...)
 }
 
-//log alert format
-func Alertf(format string, a ...interface{}) {
-	msg := fmt.Sprintf(format, a...)
-	_ = logger.Writer(go_logger.LOGGER_LEVEL_ALERT, msg)
+func Printf(format string, args ...interface{}) {
+	log.Printf(format, args...)
 }
 
-func Critical(msg string) {
-	_ = logger.Writer(go_logger.LOGGER_LEVEL_CRITICAL, msg)
+func Warnf(format string, args ...interface{}) {
+	log.Logf(logrus.WarnLevel, format, args...)
 }
 
-func Criticalf(format string, a ...interface{}) {
-	msg := fmt.Sprintf(format, a...)
-	_ = logger.Writer(go_logger.LOGGER_LEVEL_CRITICAL, msg)
+func Warningf(format string, args ...interface{}) {
+	log.Warnf(format, args...)
 }
 
-func Error(msg string) {
-	_ = logger.Writer(go_logger.LOGGER_LEVEL_ERROR, msg)
+func Errorf(format string, args ...interface{}) {
+	log.Logf(logrus.ErrorLevel, format, args...)
 }
 
-func Warning(msg string) {
-	_ = logger.Writer(go_logger.LOGGER_LEVEL_WARNING, msg)
+func Fatalf(format string, args ...interface{}) {
+	log.Logf(logrus.FatalLevel, format, args...)
+	log.Exit(1)
 }
 
-func Warningf(format string, a ...interface{}) {
-	msg := fmt.Sprintf(format, a...)
-	_ = logger.Writer(go_logger.LOGGER_LEVEL_WARNING, msg)
+func Panicf(format string, args ...interface{}) {
+	log.Logf(logrus.PanicLevel, format, args...)
 }
 
-func Notice(msg string) {
-	_ = logger.Writer(go_logger.LOGGER_LEVEL_NOTICE, msg)
+func Log(level logrus.Level, args ...interface{}) {
+	if log.IsLevelEnabled(level) {
+		log.Log(level, args...)
+	}
 }
 
-func Noticef(format string, a ...interface{}) {
-	msg := fmt.Sprintf(format, a...)
-	_ = logger.Writer(go_logger.LOGGER_LEVEL_NOTICE, msg)
+func Trace(args ...interface{}) {
+	log.Log(logrus.TraceLevel, args...)
 }
 
-func Info(msg string) {
-	_ = logger.Writer(go_logger.LOGGER_LEVEL_INFO, msg)
+func Debug(args ...interface{}) {
+	log.Log(logrus.DebugLevel, args...)
 }
 
-func Infof(format string, a ...interface{}) {
-	msg := fmt.Sprintf(format, a...)
-	_ = logger.Writer(go_logger.LOGGER_LEVEL_INFO, msg)
+func Info(args ...interface{}) {
+	log.Log(logrus.InfoLevel, args...)
 }
 
-func Debug(msg string) {
-	_ = logger.Writer(go_logger.LOGGER_LEVEL_DEBUG, msg)
+func Print(args ...interface{}) {
+	log.Print(args...)
 }
 
-func Debugf(format string, a ...interface{}) {
-	msg := fmt.Sprintf(format, a...)
-	_ = logger.Writer(go_logger.LOGGER_LEVEL_DEBUG, msg)
+func Warn(args ...interface{}) {
+	log.Log(logrus.WarnLevel, args...)
 }
 
-func Flush() {
-	if logger != nil && asyncMode {
-		logger.Flush()
+func Warning(args ...interface{}) {
+	log.Warn(args...)
+}
+
+func Error(args ...interface{}) {
+	log.Log(logrus.ErrorLevel, args...)
+}
+
+func Fatal(args ...interface{}) {
+	log.Log(logrus.FatalLevel, args...)
+	log.Exit(1)
+}
+
+func Panic(args ...interface{}) {
+	log.Log(logrus.PanicLevel, args...)
+}
+
+func Logln(level logrus.Level, args ...interface{}) {
+	if log.IsLevelEnabled(level) {
+		log.Logln(level, args...)
 	}
 }

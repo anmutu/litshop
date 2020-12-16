@@ -1,8 +1,9 @@
 package main
 
 import (
-	"litshop/src/app/api/routes"
+	"litshop/api/routes"
 	_ "litshop/src/bootstrap"
+	"litshop/src/pkg/logger"
 )
 
 import (
@@ -44,13 +45,10 @@ func signalListen() {
 
 func main() {
 	host = fmt.Sprintf(":%d", config.GetInt("port"))
-
 	setupGin()
-
 	r.Use(gin.Logger())
-
 	routes.ApiRoutes(r)
-
 	go signalListen()
+	logger.Info("app running on ", host)
 	_ = r.Run(host)
 }

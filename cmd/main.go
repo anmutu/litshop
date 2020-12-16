@@ -1,6 +1,6 @@
 package main
 
-import "litshop/src/app/cmd/command"
+import "litshop/cmd/command"
 
 func main() {
 	_ = command.Execute()
