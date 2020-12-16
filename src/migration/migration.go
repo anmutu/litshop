@@ -10,8 +10,7 @@ func GetMigrations() []*gormigrate.Migration {
 	var migrations []*gormigrate.Migration
 	migrations = make([]*gormigrate.Migration, 10)
 
-	migrations = append(migrations, NewCustomerMigration().Additionally()...)
-	migrations = append(migrations, NewCustomerMigration().Additionally()...)
+	migrations = append(migrations, NewInitialMigration().Additionally()...)
 
 	return migrations
 }

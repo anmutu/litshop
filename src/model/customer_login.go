@@ -2,7 +2,7 @@ package model
 
 import "litshop/src/core/types"
 
-type CustomerLogins struct {
+type CustomerLogin struct {
 	Model
 	CustomerDataMode
 
@@ -14,6 +14,10 @@ type CustomerLogins struct {
 	Status      types.CustomerLoginStatus `json:"status"`
 }
 
-func (*CustomerLogins) TableName() string {
+func (*CustomerLogin) Connection() string {
+	return "customer"
+}
+
+func (*CustomerLogin) TableName() string {
 	return "customer_login"
 }

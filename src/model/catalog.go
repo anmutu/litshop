@@ -13,3 +13,7 @@ type Catalog struct {
 	LogoMediaId   uint64          `json:"logo_media_id"`
 	BannerMediaId uint64          `json:"banner_media_id"`
 }
+
+func (*Catalog) TableName() string {
+	return "catalog"
+}

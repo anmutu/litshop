@@ -10,3 +10,7 @@ type Category struct {
 	Desc   string          `json:"desc"`
 	Status types.ComStatus `json:"status"`
 }
+
+func (*Category) TableName() string {
+	return "category"
+}

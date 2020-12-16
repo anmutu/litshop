@@ -3,6 +3,7 @@ package main
 import (
 	"litshop/api/routes"
 	_ "litshop/src/bootstrap"
+	"litshop/src/core/runtime"
 	"litshop/src/pkg/logger"
 )
 
@@ -37,7 +38,8 @@ func signalListen() {
 		s := <-c
 		fmt.Println("get signal:", s)
 
-		// todo
+		// 结束
+		runtime.ShutDown()
 
 		os.Exit(0)
 	}

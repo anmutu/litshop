@@ -8,3 +8,7 @@ type CustomerProfile struct {
 func (*CustomerProfile) TableName() string {
 	return "customer_profile"
 }
+
+func (*CustomerProfile) Connection() string {
+	return "customer"
+}

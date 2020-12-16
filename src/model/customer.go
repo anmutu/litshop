@@ -12,6 +12,10 @@ type Customer struct {
 	Status   types.CustomerStatus `json:"status"`
 }
 
+func (*Customer) Connection() string {
+	return "customer"
+}
+
 func (*Customer) TableName() string {
 	return "customer"
 }

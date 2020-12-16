@@ -14,3 +14,7 @@ type Cart struct {
 	Status     CartItemStatus `json:"status"`
 	Additional interface{}    `json:"additional"`
 }
+
+func (*Cart) TableName() string {
+	return "cart"
+}

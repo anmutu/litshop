@@ -14,3 +14,11 @@ type Media struct {
 	Mime     string        `json:"mime"`
 	Duration time.Duration `json:"duration"`
 }
+
+func (*Media) TableName() string {
+	return "media"
+}
+
+func (*Media) Connection() string {
+	return "default"
+}
