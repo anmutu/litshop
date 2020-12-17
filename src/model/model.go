@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type IModel interface {
+type Modeler interface {
 	schema.Tabler
 	Connection() string
 }
