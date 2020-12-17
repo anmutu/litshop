@@ -5,6 +5,10 @@ type Customer interface {
 	Email() string
 }
 
-type HasToken interface {
+type HasTokener interface {
 	Token() string
+}
+
+type Jsoner interface {
+	Json() ([]byte, error)
 }

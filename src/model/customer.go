@@ -1,6 +1,7 @@
 package model
 
 import (
+	"database/sql"
 	"litshop/src/core/types"
 )
 
@@ -10,6 +11,15 @@ type Customer struct {
 	NickName string               `json:"nick_name"`
 	Avatar   string               `json:"avatar"`
 	Status   types.CustomerStatus `json:"status"`
+	Phone    string               `json:"phone"`
+	Email    string               `json:"email"`
+	Age      int                  `json:"age"`
+	Birth    sql.NullTime         `json:"birth"`
+	Gender   types.CustomerGender `json:"gender"`
+	Country  string               `json:"country"`
+	Province string               `json:"province"`
+	City     string               `json:"city"`
+	Password string               `json:"password"`
 }
 
 func (*Customer) Connection() string {
@@ -18,16 +28,4 @@ func (*Customer) Connection() string {
 
 func (*Customer) TableName() string {
 	return "customer"
-}
-
-func (*Customer) Phone() string {
-	return ""
-}
-
-func (*Customer) Email() string {
-	return ""
-}
-
-func (*Customer) Token() string {
-	return ""
 }

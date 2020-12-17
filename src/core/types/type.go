@@ -1,5 +1,19 @@
 package types
 
+// 一次性密码
+type OtpAction = int
+
+const (
+	OtpActionDefault OtpAction = iota
+	OtpActionSignUp
+	OtpActionSignIn
+	OtpActionResetPassword
+	OtpActionVerifyEmail
+	OtpActionVerifyPhone
+	OtpActionBindPhone
+	OtpActionBindEmail
+)
+
 // 通用的状态
 type ComStatus = int
 
@@ -10,33 +24,48 @@ const (
 )
 
 // 用户状态
+type CustomerGender = int
 type CustomerStatus = int
 type CustomerLoginStatus = int
-type CustomerAuthType = int
+type CustomerAuthType int
+
+const (
+	CustomerGenderUnknown CustomerGender = iota
+	CustomerGenderFemale
+	CustomerGenderMale
+)
 
 const (
 	CustomerStatusNormal   = 1
 	CustomerStatusDisabled = 2
 	CustomerStatusDeleted  = -9
 )
-
 const (
-	CustomerAuthTypeUsername = 1
-	CustomerAuthTypeEmail    = 2
-	CustomerAuthTypePhone    = 3
-	CustomerAuthTypeWechat   = 4
-	CustomerAuthTypeGoogle   = 5
-	CustomerAuthTypeFacebook = 6
-	CustomerAuthTypeAppleId  = 7
-	CustomerAuthTypeWeibo    = 8
-	CustomerAuthTypeQQ       = 9
+	CustomerAuthTypeNull CustomerAuthType = iota
+	CustomerAuthTypeUsername
+	CustomerAuthTypeEmail
+	CustomerAuthTypePhone
+	CustomerAuthTypeWechat
+	CustomerAuthTypeGoogle
+	CustomerAuthTypeFacebook
+	CustomerAuthTypeAppleId
+	CustomerAuthTypeWeibo
+	CustomerAuthTypeQQ
+	CustomerAuthTypeMax
 )
-
 const (
 	CustomerLoginStatusNormal   = 1
 	CustomerLoginStatusDisabled = 2
 	CustomerLoginStatusDeleted  = -9
 )
+
+func (t CustomerAuthType) IsValid() bool {
+	if t > 0 && t <= CustomerAuthTypeMax {
+		return true
+	}
+
+	return false
+}
 
 // 属性状态
 type AttributeType = int

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"encoding/json"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
 	"time"
@@ -9,6 +10,7 @@ import (
 type Modeler interface {
 	schema.Tabler
 	Connection() string
+	Ms() map[string]interface{}
 }
 
 type Model struct {
@@ -20,6 +22,13 @@ type Model struct {
 
 func (*Model) Connection() string {
 	return "default"
+}
+
+func (m *Model) Ms() map[string]interface{} {
+	b, _ := json.Marshal(&m)
+	var ms map[string]interface{}
+	_ = json.Unmarshal(b, &ms)
+	return ms
 }
 
 type CustomerDataMode struct {
