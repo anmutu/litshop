@@ -3,7 +3,6 @@ package mysql
 import (
 	"database/sql"
 	"encoding/json"
-	"errors"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"litshop/src/config"
@@ -13,7 +12,7 @@ import (
 	"time"
 )
 
-var connClientMappingPool map[string]sync.Pool
+var connClientMappingPool map[string]*sync.Pool
 
 type mysqlConnectParams struct {
 	Name     string `json:"name"`
@@ -39,8 +38,8 @@ func init() {
 			return
 		}
 
-		connClientMappingPool = make(map[string]sync.Pool, len(conf))
-		connClientMappingPool[k] = sync.Pool{
+		connClientMappingPool = make(map[string]*sync.Pool, len(conf))
+		connClientMappingPool[k] = &sync.Pool{
 			New: func() interface{} {
 				return connect(buildDsn(param))
 			},
@@ -52,14 +51,13 @@ func buildDsn(p mysqlConnectParams) string {
 	return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=true", p.User, p.Password, p.Host, p.Port, p.Name)
 }
 
-func ConnectByName(name string) *sql.DB {
-	poll, ok := connClientMappingPool[name]
-	if !ok {
-		panic(errors.New("connect not defined"))
-	}
-
-	db := poll.Get()
+func ClientByConn(conn string) *sql.DB {
+	db := connClientMappingPool[conn].Get()
 	return db.(*sql.DB)
+}
+
+func PutClientBack(conn string, client interface{}) {
+	connClientMappingPool[conn].Put(client)
 }
 
 func connect(dsn string) *sql.DB {
