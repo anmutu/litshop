@@ -9,10 +9,11 @@ import (
 	"litshop/src/config"
 	"litshop/src/core/runtime"
 	"log"
+	"sync"
 	"time"
 )
 
-var clients map[string]*sql.DB
+var connClientMappingPool map[string]sync.Pool
 
 type mysqlConnectParams struct {
 	Name     string `json:"name"`
@@ -23,8 +24,6 @@ type mysqlConnectParams struct {
 }
 
 func init() {
-	clients = make(map[string]*sql.DB, 1)
-
 	conf := config.GetMap("database.mysql")
 	for k, v := range conf {
 		jByte, err := json.Marshal(v)
@@ -40,10 +39,11 @@ func init() {
 			return
 		}
 
-		err = connect(k, buildDsn(param))
-		if err != nil {
-			log.Fatal(fmt.Sprintf("parse mysql config err: %#v", err))
-			return
+		connClientMappingPool = make(map[string]sync.Pool, len(conf))
+		connClientMappingPool[k] = sync.Pool{
+			New: func() interface{} {
+				return connect(buildDsn(param))
+			},
 		}
 	}
 }
@@ -53,29 +53,28 @@ func buildDsn(p mysqlConnectParams) string {
 }
 
 func ConnectByName(name string) *sql.DB {
-	db, ok := clients[name]
+	poll, ok := connClientMappingPool[name]
 	if !ok {
 		panic(errors.New("connect not defined"))
 	}
 
-	return db
+	db := poll.Get()
+	return db.(*sql.DB)
 }
 
-func connect(connectName string, dsn string) error {
+func connect(dsn string) *sql.DB {
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {
-		return err
+		panic(err)
 	}
-	// See "Important settings" section.
+
 	db.SetConnMaxLifetime(time.Minute * 3)
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(10)
-
-	clients[connectName] = db
 
 	runtime.RegisterShutdown(func() {
 		_ = db.Close()
 	})
 
-	return nil
+	return db
 }
