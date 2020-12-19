@@ -1,7 +1,11 @@
 package command
 
 import (
+	"github.com/go-gormigrate/gormigrate/v2"
 	"github.com/spf13/cobra"
+	"litshop/src/config/mysql"
+	"litshop/src/migration"
+	"litshop/src/pkg/logger"
 )
 
 func init() {
@@ -15,5 +19,14 @@ var migrateCmd = &cobra.Command{
 }
 
 func migrate(cmd *cobra.Command, args []string) {
+	migrations := migration.GetMigrations()
+	for conn, mList := range migrations {
+		db := mysql.GormClientByConn(conn)
+		m := gormigrate.New(db, gormigrate.DefaultOptions, mList)
+		if err := m.Migrate(); err != nil {
+			logger.Fatalf("Could not migrate: %v", err)
+		}
+	}
 
+	logger.Printf("Migration did run successfully")
 }

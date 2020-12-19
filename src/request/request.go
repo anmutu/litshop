@@ -1,7 +1,7 @@
 package request
 
 import (
-	"litshop/src/core/types"
+	"litshop/src/lvm/types"
 )
 
 type SignInRequest struct {

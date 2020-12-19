@@ -1,9 +1,7 @@
 package context
 
 import (
-	"fmt"
 	"net/http"
-	"reflect"
 	"sync"
 	"time"
 )
@@ -15,8 +13,11 @@ type Context struct {
 	Request *http.Request
 	Writer  http.ResponseWriter
 
-	App  string
-	Opts map[string]interface{}
+	App        string
+	Opts       map[string]interface{}
+	HttpHeader http.Header
+
+	Session Session
 }
 
 func (*Context) Deadline() (deadline time.Time, ok bool) {
@@ -37,19 +38,16 @@ func (*Context) Value(key interface{}) interface{} {
 
 type setter map[string][]string
 
-func (*Context) SetHeader(header http.Header) interface{} {
-	type Head struct {
-		ContentType string `json:"content_type"`
-	}
-
-	h := Head{}
-	_ = mapping(h, setter(header))
-	return nil
+func (c *Context) SetHeader(header http.Header) {
+	c.HttpHeader = header
 }
 
-func mapping(ptr interface{}, h map[string][]string) error {
-	fmt.Printf("reflect.ValueOf %#v \n", reflect.ValueOf(ptr))
-	return nil
+func (c *Context) GetHeaders() http.Header {
+	return c.HttpHeader
+}
+
+func (c *Context) GetHeader(key string) string {
+	return c.HttpHeader.Get(key)
 }
 
 func (c *Context) Set(key string, value interface{}) {

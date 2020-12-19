@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package pb.protobuf.common;
+
+option go_package = "pb/protobuf/common";
+
+import "google/protobuf/any.proto";
+
+message Request {
+    int64 created_ts = 1001;
+    google.protobuf.Any client_info = 1002;
+    string request_id = 1003;
+    google.protobuf.Any data = 1004;
+}

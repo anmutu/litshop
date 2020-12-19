@@ -3,7 +3,7 @@ package main
 import (
 	"litshop/api/routes"
 	_ "litshop/src/bootstrap"
-	"litshop/src/core/runtime"
+	"litshop/src/lvm/runtime"
 	"litshop/src/pkg/logger"
 )
 

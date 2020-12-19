@@ -1,26 +1,13 @@
 syntax = "proto3";
 
-package litshop;
-option go_package = "protobuf/authservice";
+package pb.protobuf;
+option go_package = "pb/protobuf";
+
+import "request.proto";
+import "response.proto";
 
 service AuthService {
-    rpc SignIn(AddItemRequest) returns (Empty) {}
-    rpc SignUp(AddItemRequest) returns (Empty) {}
-    rpc Logout(EmptyCustomerRequest) returns (Empty) {}
+    rpc SignIn(pb.protobuf.common.Request) returns (pb.protobuf.common.Response) {}
+    rpc SignUp(pb.protobuf.common.Request) returns (pb.protobuf.common.Response) {}
+    rpc Logout(pb.protobuf.common.Request) returns (pb.protobuf.common.Response) {}
 }
-
-message CartItem {
-    string product_id = 1;
-    int32  quantity = 2;
-}
-
-message AddItemRequest {
-    string user_id = 1;
-    CartItem item = 2;
-}
-
-message EmptyCustomerRequest {
-    string user_id = 1;
-}
-
-message Empty {}

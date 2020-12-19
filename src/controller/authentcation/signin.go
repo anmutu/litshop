@@ -1,10 +1,10 @@
 package authentcation
 
 import (
-	"litshop/src/core/literr"
-	"litshop/src/core/types"
+	"litshop/src/lvm/context"
+	"litshop/src/lvm/literr"
+	"litshop/src/lvm/types"
 	"litshop/src/module/auth"
-	"litshop/src/pkg/context"
 	"litshop/src/pkg/util"
 	"litshop/src/request"
 	"litshop/src/response"

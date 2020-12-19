@@ -5,14 +5,16 @@ import (
 	"encoding/json"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	"litshop/src/config"
-	"litshop/src/core/runtime"
+	"litshop/src/lvm/runtime"
 	"log"
-	"sync"
 	"time"
 )
 
-var connClientMappingPool map[string]*sync.Pool
+var connections []string
+var connClientMapping map[string]*sql.DB
 
 type mysqlConnectParams struct {
 	Name     string `json:"name"`
@@ -24,6 +26,9 @@ type mysqlConnectParams struct {
 
 func init() {
 	conf := config.GetMap("database.mysql")
+	connClientMapping = make(map[string]*sql.DB, len(conf))
+	connections = make([]string, len(conf))
+
 	for k, v := range conf {
 		jByte, err := json.Marshal(v)
 		if err != nil {
@@ -37,14 +42,13 @@ func init() {
 			log.Fatal(fmt.Sprintf("parse mysql config err: %#v", err))
 			return
 		}
-
-		connClientMappingPool = make(map[string]*sync.Pool, len(conf))
-		connClientMappingPool[k] = &sync.Pool{
-			New: func() interface{} {
-				return connect(buildDsn(param))
-			},
-		}
+		connections = append(connections, k)
+		connClientMapping[k] = connect(buildDsn(param))
 	}
+}
+
+func Connections() []string {
+	return connections
 }
 
 func buildDsn(p mysqlConnectParams) string {
@@ -52,12 +56,20 @@ func buildDsn(p mysqlConnectParams) string {
 }
 
 func ClientByConn(conn string) *sql.DB {
-	db := connClientMappingPool[conn].Get()
-	return db.(*sql.DB)
+	return connClientMapping[conn]
 }
 
-func PutClientBack(conn string, client interface{}) {
-	connClientMappingPool[conn].Put(client)
+func GormClientByConn(conn string) *gorm.DB {
+	sqlDB := connClientMapping[conn]
+	gormDB, err := gorm.Open(mysql.New(mysql.Config{
+		Conn: sqlDB,
+	}), &gorm.Config{})
+
+	if err != nil {
+		panic(err)
+	}
+
+	return gormDB
 }
 
 func connect(dsn string) *sql.DB {

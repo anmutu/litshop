@@ -1,6 +1,6 @@
 package model
 
-import "litshop/src/core/types"
+import "litshop/src/lvm/types"
 
 // 店铺商品分类
 type Catalog struct {

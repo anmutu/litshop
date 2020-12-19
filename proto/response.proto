@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package pb.protobuf.common;
+
+option go_package = "pb/protobuf/common";
+
+message Response {
+    string message = 2001;
+    string code = 2004;
+    int64 server_ts = 2002;
+    string request_id = 2003;
+    string result = 2005;
+}

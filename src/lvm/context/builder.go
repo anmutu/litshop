@@ -13,5 +13,12 @@ func FromGinContext(ctx *gin.Context) (*Context, error) {
 
 	ginCtx = ctx
 
+	c.SetHeader(ginCtx.Request.Header)
+
+	return c, nil
+}
+
+func FromGrpcServer() (*Context, error) {
+	c := New()
 	return c, nil
 }

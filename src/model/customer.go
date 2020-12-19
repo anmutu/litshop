@@ -2,7 +2,7 @@ package model
 
 import (
 	"database/sql"
-	"litshop/src/core/types"
+	"litshop/src/lvm/types"
 )
 
 type Customer struct {

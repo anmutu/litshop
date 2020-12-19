@@ -1,7 +1,7 @@
 package authentcation
 
 import (
-	"litshop/src/pkg/context"
+	"litshop/src/lvm/context"
 	"litshop/src/request"
 	"litshop/src/response"
 )

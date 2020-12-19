@@ -1,6 +1,6 @@
 package model
 
-import "litshop/src/core/types"
+import "litshop/src/lvm/types"
 
 type Brand struct {
 	Model

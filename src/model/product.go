@@ -2,7 +2,7 @@ package model
 
 import (
 	"golang.org/x/text/currency"
-	"litshop/src/core/types"
+	"litshop/src/lvm/types"
 )
 
 type Product struct {

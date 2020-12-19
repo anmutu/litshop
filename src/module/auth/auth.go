@@ -2,7 +2,7 @@ package auth
 
 import (
 	"errors"
-	"litshop/src/core/types"
+	"litshop/src/lvm/types"
 	"litshop/src/model"
 	"litshop/src/module/customer"
 )

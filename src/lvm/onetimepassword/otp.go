@@ -1,6 +1,6 @@
 package onetimepassword
 
-import "litshop/src/core/types"
+import "litshop/src/lvm/types"
 
 func GetCode(action types.OtpAction) string {
 	return ""

@@ -2,8 +2,8 @@ package local
 
 import (
 	"litshop/src/config"
-	"litshop/src/core/local/en"
-	"litshop/src/core/local/zh-CN"
+	"litshop/src/lvm/local/en"
+	"litshop/src/lvm/local/zh-CN"
 )
 
 var langList map[string]map[string]string

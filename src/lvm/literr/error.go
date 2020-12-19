@@ -2,7 +2,7 @@ package literr
 
 import (
 	"encoding/json"
-	"litshop/src/core/local"
+	"litshop/src/lvm/local"
 	"litshop/src/pkg/d"
 )
 
