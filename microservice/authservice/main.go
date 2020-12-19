@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"google.golang.org/grpc"
 	"litshop/pb/protobuf"
@@ -10,6 +11,7 @@ import (
 	"litshop/src/config"
 	"litshop/src/controller/authentcation"
 	context2 "litshop/src/lvm/context"
+	"litshop/src/lvm/literr"
 	"litshop/src/pkg/logger"
 	"litshop/src/request"
 	"net"
@@ -34,8 +36,23 @@ type AuthService struct {
 
 func (*AuthService) SignIn(c context.Context, in *common.Request) (*common.Response, error) {
 	ctx, _ := context2.FromGrpcServer()
-	_, err := authentcation.SignIn(ctx, &request.SignInRequest{})
 
+	r := &request.SignInRequest{}
+
+	if in.GetSignInRequest() == nil {
+		return nil, literr.NewWithCode(literr.ErrCodeInvalidRequestParams)
+	}
+
+	b, err := json.Marshal(in.GetSignInRequest())
+	if err != nil {
+		return nil, nil
+	}
+	err = json.Unmarshal(b, r)
+	if err != nil {
+		return nil, nil
+	}
+
+	_, err = authentcation.SignIn(ctx, r)
 	return nil, err
 }
 

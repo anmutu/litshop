@@ -29,9 +29,9 @@ func New(code int, message string) *LitError {
 	}
 }
 
-func NewWithCode(code int) *LitError {
+func NewWithCode(code Code) *LitError {
 	return &LitError{
-		Code:    code,
+		Code:    int(code),
 		Message: local.Trans(trans(code)),
 	}
 }

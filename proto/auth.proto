@@ -11,3 +11,4 @@ service AuthService {
     rpc SignUp(pb.protobuf.common.Request) returns (pb.protobuf.common.Response) {}
     rpc Logout(pb.protobuf.common.Request) returns (pb.protobuf.common.Response) {}
 }
+

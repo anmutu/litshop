@@ -11,4 +11,22 @@ message Request {
     google.protobuf.Any client_info = 1002;
     string request_id = 1003;
     google.protobuf.Any data = 1004;
+
+    oneof body {
+        SignInRequest sign_in_request = 1100;
+        SignUpRequest sign_up_request = 1101;
+        LogoutRequest logout_request = 1102;
+    }
+}
+
+message SignInRequest {
+
+}
+
+message SignUpRequest {
+
+}
+
+message LogoutRequest {
+
 }
