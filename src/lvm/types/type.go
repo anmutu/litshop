@@ -1,5 +1,7 @@
 package types
 
+import "fmt"
+
 // 一次性密码
 type OtpAction = int
 
@@ -28,6 +30,18 @@ type CustomerGender = int
 type CustomerStatus = int
 type CustomerLoginStatus = int
 type CustomerAuthType int
+
+func (at *CustomerAuthType) String() string {
+	return fmt.Sprintf("%d", *at)
+}
+
+func (at CustomerAuthType) IsValid() bool {
+	if at > 0 && at <= CustomerAuthTypeMax {
+		return true
+	}
+
+	return false
+}
 
 const (
 	CustomerGenderUnknown CustomerGender = iota
@@ -58,14 +72,6 @@ const (
 	CustomerLoginStatusDisabled = 2
 	CustomerLoginStatusDeleted  = -9
 )
-
-func (t CustomerAuthType) IsValid() bool {
-	if t > 0 && t <= CustomerAuthTypeMax {
-		return true
-	}
-
-	return false
-}
 
 // 属性状态
 type AttributeType = int

@@ -1,4 +1,4 @@
-package onetimepassword
+package otp
 
 import "litshop/src/lvm/types"
 
