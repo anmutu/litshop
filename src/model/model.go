@@ -30,11 +30,3 @@ func (m *Model) Ms() map[string]interface{} {
 	_ = json.Unmarshal(b, &ms)
 	return ms
 }
-
-type CustomerDataMode struct {
-	CustomerId uint64 `gorm:"primarykey" json:"customer_id"`
-}
-
-type ProductDataMode struct {
-	ProductId uint64 `gorm:"primarykey" json:"product_id"`
-}

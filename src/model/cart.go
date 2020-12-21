@@ -8,13 +8,13 @@ type CartItemStatus = int
 
 type Cart struct {
 	Model
-	CustomerDataMode
-	ProductDataMode
+	CustomerId uint64         `json:"customer_id"`
+	ProductId  uint64         `json:"product_id"`
 	AddAt      time.Time      `json:"add_at"`
 	SkuId      uint64         `json:"sku_id"`
 	Quantity   uint64         `json:"quantity"`
 	Status     CartItemStatus `json:"status"`
-	Additional interface{}    `json:"additional"`
+	Additional interface{}    `json:"additional" gorm:"type:varchar(255)"`
 }
 
 func (*Cart) TableName() string {

@@ -2,7 +2,7 @@ package model
 
 type ProductCatalogMapping struct {
 	Model
-	ProductDataMode
+	ProductId uint64 `json:"product_id"`
 	CatalogId uint64 `json:"catalog_id"`
 }
 

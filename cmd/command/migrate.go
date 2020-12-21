@@ -1,6 +1,7 @@
 package command
 
 import (
+	"fmt"
 	"github.com/go-gormigrate/gormigrate/v2"
 	"github.com/spf13/cobra"
 	"litshop/src/config/mysql"
@@ -20,6 +21,8 @@ var migrateCmd = &cobra.Command{
 
 func migrate(cmd *cobra.Command, args []string) {
 	migrations := migration.GetMigrations()
+	fmt.Printf("migrations %#v \n", migrations)
+
 	for conn, mList := range migrations {
 		db := mysql.GormClientByConn(conn)
 		m := gormigrate.New(db, gormigrate.DefaultOptions, mList)

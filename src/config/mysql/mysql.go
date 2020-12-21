@@ -26,8 +26,8 @@ type mysqlConnectParams struct {
 
 func init() {
 	conf := config.GetMap("database.mysql")
-	connClientMapping = make(map[string]*sql.DB, len(conf))
-	connections = make([]string, len(conf))
+	connClientMapping = make(map[string]*sql.DB)
+	connections = make([]string, 0)
 
 	for k, v := range conf {
 		jByte, err := json.Marshal(v)
@@ -45,6 +45,8 @@ func init() {
 		connections = append(connections, k)
 		connClientMapping[k] = connect(buildDsn(param))
 	}
+
+	fmt.Printf("connClientMappings %#v \n", connClientMapping)
 }
 
 func Connections() []string {
@@ -52,7 +54,9 @@ func Connections() []string {
 }
 
 func buildDsn(p mysqlConnectParams) string {
-	return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=true", p.User, p.Password, p.Host, p.Port, p.Name)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=true", p.User, p.Password, p.Host, p.Port, p.Name)
+	//fmt.Printf("mysql dsn %s \n", dsn)
+	return dsn
 }
 
 func ClientByConn(conn string) *sql.DB {
@@ -60,7 +64,13 @@ func ClientByConn(conn string) *sql.DB {
 }
 
 func GormClientByConn(conn string) *gorm.DB {
+	if conn == "" {
+		return nil
+	}
+
 	sqlDB := connClientMapping[conn]
+	fmt.Printf("sqlDB conn %#v %#v \n", sqlDB, conn)
+
 	gormDB, err := gorm.Open(mysql.New(mysql.Config{
 		Conn: sqlDB,
 	}), &gorm.Config{})

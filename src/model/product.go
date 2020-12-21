@@ -1,7 +1,6 @@
 package model
 
 import (
-	"golang.org/x/text/currency"
 	"litshop/src/lvm/types"
 )
 
@@ -13,8 +12,8 @@ type Product struct {
 	Desc         string            `json:"desc"`
 	SellingPoint string            `json:"selling_point"`
 	Unit         string            `json:"unit"`
-	Fee          currency.Amount   `json:"fee"`
-	MarketingFee currency.Amount   `json:"marketing_fee"`
+	Fee          uint64            `json:"fee"`
+	MarketingFee uint64            `json:"marketing_fee"`
 	Status       types.ComStatus   `json:"status"`
 	OnSale       bool              `json:"on_sale"`
 	Type         types.ProductType `json:"type"`

@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"google.golang.org/grpc"
 	"litshop/pb/protobuf"
@@ -13,6 +12,7 @@ import (
 	context2 "litshop/src/lvm/context"
 	"litshop/src/lvm/literr"
 	"litshop/src/pkg/logger"
+	"litshop/src/pkg/util"
 	"litshop/src/request"
 	"net"
 )
@@ -43,16 +43,12 @@ func (*AuthService) SignIn(c context.Context, in *common.Request) (*common.Respo
 		return nil, literr.NewWithCode(literr.ErrCodeInvalidRequestParams)
 	}
 
-	b, err := json.Marshal(in.GetSignInRequest())
-	if err != nil {
-		return nil, nil
-	}
-	err = json.Unmarshal(b, r)
-	if err != nil {
-		return nil, nil
+	ok := util.Struct2Struct(in, r)
+	if !ok {
+		return nil, literr.NewWithCode(literr.ErrCodeInvalidRequestParams)
 	}
 
-	_, err = authentcation.SignIn(ctx, r)
+	_, err := authentcation.SignIn(ctx, r)
 	return nil, err
 }
 

@@ -19,6 +19,7 @@ require (
 	github.com/spf13/viper v1.7.1
 	github.com/tebeka/strftime v0.1.5 // indirect
 	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
+	golang.org/x/mobile v0.0.0-20190719004257-d2bd2a29d028
 	golang.org/x/text v0.3.3
 	google.golang.org/grpc v1.27.0
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.0.1 // indirect

@@ -2,7 +2,7 @@ package model
 
 type CustomerProfile struct {
 	Model
-	CustomerDataMode
+	CustomerId uint64 `json:"customer_id"`
 }
 
 func (*CustomerProfile) TableName() string {

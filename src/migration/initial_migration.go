@@ -15,7 +15,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 	case "customer":
 		return []*gormigrate.Migration{
 			{
-				ID: "20201210",
+				ID: "202012100001",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.Customer{})
 				},
@@ -24,7 +24,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 				},
 			},
 			{
-				ID: "20201210",
+				ID: "20201210002",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.CustomerLogin{})
 				},
@@ -33,7 +33,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 				},
 			},
 			{
-				ID: "20201210",
+				ID: "20201210003",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.CustomerProfile{})
 				},
@@ -46,7 +46,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 	default:
 		return []*gormigrate.Migration{
 			{
-				ID: "20201210",
+				ID: "20201210004",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.Address{})
 				},
@@ -55,7 +55,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 				},
 			},
 			{
-				ID: "20201210",
+				ID: "20201210005",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.Attribute{})
 				},
@@ -64,7 +64,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 				},
 			},
 			{
-				ID: "20201210",
+				ID: "20201210006",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.AttributeFamily{})
 				},
@@ -73,7 +73,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 				},
 			},
 			{
-				ID: "20201210",
+				ID: "20201210007",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.AttributeGroup{})
 				},
@@ -82,7 +82,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 				},
 			},
 			{
-				ID: "20201210",
+				ID: "20201210008",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.AttributeGroupMapping{})
 				},
@@ -91,7 +91,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 				},
 			},
 			{
-				ID: "20201210",
+				ID: "20201210009",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.AttributeOption{})
 				},
@@ -100,7 +100,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 				},
 			},
 			{
-				ID: "20201210",
+				ID: "20201210010",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.Brand{})
 				},
@@ -109,7 +109,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 				},
 			},
 			{
-				ID: "20201210",
+				ID: "20201210011",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.Cart{})
 				},
@@ -118,7 +118,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 				},
 			},
 			{
-				ID: "20201210",
+				ID: "20201210012",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.Catalog{})
 				},
@@ -127,7 +127,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 				},
 			},
 			{
-				ID: "20201210",
+				ID: "20201210013",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.Category{})
 				},
@@ -136,7 +136,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 				},
 			},
 			{
-				ID: "20201210",
+				ID: "20201210014",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.Media{})
 				},
@@ -145,16 +145,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 				},
 			},
 			{
-				ID: "20201210",
-				Migrate: func(tx *gorm.DB) error {
-					return tx.AutoMigrate(&model.Order{})
-				},
-				Rollback: func(tx *gorm.DB) error {
-					return tx.Migrator().DropTable((&model.Order{}).TableName())
-				},
-			},
-			{
-				ID: "20201210",
+				ID: "20201210016",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.Product{})
 				},
@@ -163,7 +154,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 				},
 			},
 			{
-				ID: "20201210",
+				ID: "20201210017",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.ProductAttrValue{})
 				},
@@ -172,7 +163,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 				},
 			},
 			{
-				ID: "20201210",
+				ID: "20201210018",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.ProductCatalogMapping{})
 				},
@@ -181,7 +172,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 				},
 			},
 			{
-				ID: "20201210",
+				ID: "20201210019",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.ProductImageMapping{})
 				},
@@ -190,7 +181,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 				},
 			},
 			{
-				ID: "20201210",
+				ID: "20201210020",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.ProductSku{})
 				},
@@ -199,7 +190,7 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 				},
 			},
 			{
-				ID: "20201210",
+				ID: "20201210021",
 				Migrate: func(tx *gorm.DB) error {
 					return tx.AutoMigrate(&model.ProductSkuStock{})
 				},
@@ -207,6 +198,15 @@ func (*InitialMigration) Additionally(conn string) []*gormigrate.Migration {
 					return tx.Migrator().DropTable((&model.ProductSkuStock{}).TableName())
 				},
 			},
+			//{
+			//	ID: "20201210022",
+			//	Migrate: func(tx *gorm.DB) error {
+			//		return tx.AutoMigrate(&model.Order{})
+			//	},
+			//	Rollback: func(tx *gorm.DB) error {
+			//		return tx.Migrator().DropTable((&model.Order{}).TableName())
+			//	},
+			//},
 		}
 	}
 }

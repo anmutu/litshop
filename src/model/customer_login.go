@@ -4,7 +4,7 @@ import "litshop/src/lvm/types"
 
 type CustomerLogin struct {
 	Model
-	CustomerDataMode
+	CustomerId uint64 `json:"customer_id"`
 
 	AuthType    types.CustomerAuthType    `json:"auth_type"`
 	AuthId      string                    `json:"auth_id"`

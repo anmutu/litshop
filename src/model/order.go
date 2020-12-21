@@ -1,6 +1,7 @@
 package model
 
 type Order struct {
+	Model
 }
 
 func (*Order) TableName() string {
