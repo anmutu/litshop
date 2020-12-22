@@ -2,7 +2,6 @@ package authentcation
 
 import (
 	"litshop/src/lvm/context"
-	"litshop/src/lvm/jwt"
 	"litshop/src/lvm/literr"
 	"litshop/src/lvm/types"
 	"litshop/src/module/auth"
@@ -40,12 +39,12 @@ func SignIn(ctx *context.Context, request *request.SignInRequest) (*response.Sig
 
 	member, err := auth.SignWithEmailOrPhoneAndPassword(loginField, request.Password, loginMethod)
 	if err != nil {
-
+		return nil, literr.NewWithCode(literr.ErrCodeInvalidRequestParams)
 	}
 
-	token, err := jwt.GenJwtToken(member)
+	token, err := member.Token()
 	if err != nil {
-		return nil, literr.NewWithCode(literr.ErrCodeInternalError)
+		return nil, err
 	}
 
 	res := &response.SignInResponse{

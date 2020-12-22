@@ -6,7 +6,7 @@ type Customer interface {
 }
 
 type HasTokener interface {
-	Token() string
+	Token() (string, error)
 }
 
 type Jsoner interface {

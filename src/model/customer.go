@@ -2,6 +2,8 @@ package model
 
 import (
 	"database/sql"
+	"litshop/src/lvm/jwt"
+	"litshop/src/lvm/literr"
 	"litshop/src/lvm/types"
 )
 
@@ -28,4 +30,13 @@ func (*Customer) Connection() string {
 
 func (*Customer) TableName() string {
 	return "customer"
+}
+
+func (c *Customer) Token() (string, error) {
+	token, err := jwt.GenJwtToken(c)
+	if err != nil {
+		return "", literr.NewWithCode(literr.ErrCodeInternalError)
+	}
+
+	return token, nil
 }
