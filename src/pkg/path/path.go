@@ -21,6 +21,10 @@ func RootPath() string {
 	return path
 }
 
+func RootPathWithPostfix(p string) string {
+	return RootPath() + "/" + p
+}
+
 func StoragePath() string {
 	return RootPath() + "/storage"
 }

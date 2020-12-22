@@ -23,6 +23,7 @@ const (
 	ErrCodeBadRequest           Code = 4000000
 	ErrCodeResourceNotFound     Code = 4000001
 	ErrCodeInvalidRequestParams Code = 4000002
+	ErrCodeAuthError            Code = 4010001
 	ErrCodeInternalError        Code = 5000000
 )
 
