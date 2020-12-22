@@ -13,7 +13,7 @@ type Cart struct {
 	AddAt      time.Time      `json:"add_at"`
 	SkuId      uint64         `json:"sku_id"`
 	Quantity   uint64         `json:"quantity"`
-	Status     CartItemStatus `json:"status"`
+	Status     CartItemStatus `json:"status" gorm:"type:integer(10)"`
 	Additional interface{}    `json:"additional" gorm:"type:varchar(255)"`
 }
 

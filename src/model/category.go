@@ -6,9 +6,9 @@ import "litshop/src/lvm/types"
 type Category struct {
 	Model
 	Pid    uint64          `json:"pid"`
-	Name   string          `json:"name"`
-	Desc   string          `json:"desc"`
-	Status types.ComStatus `json:"status"`
+	Name   string          `json:"name" gorm:"type:varchar(255)"`
+	Desc   string          `json:"desc" gorm:"type:varchar(255)"`
+	Status types.ComStatus `json:"status" gorm:"type:integer(10)"`
 }
 
 func (*Category) TableName() string {

@@ -7,28 +7,28 @@ type Gender = int
 type Address struct {
 	Model
 	CustomerId  uint64      `json:"customer_id"`
-	Consignee   int         `json:"consignee"`
-	AddressType int         `json:"address_type"`
-	Name        string      `json:"name"`
-	Gender      Gender      `json:"gender"`
-	CompanyName string      `json:"company_name"`
-	Address1    string      `json:"address1"`
-	Address2    string      `json:"address2"`
-	Postcode    string      `json:"postcode"`
-	Street      string      `json:"street"`
-	Area        string      `json:"area"`
-	City        string      `json:"city"`
-	State       string      `json:"state"`
-	Country     string      `json:"country"`
-	AreaNo      string      `json:"area_no"`
-	CityNo      string      `json:"city_no"`
-	StateNo     string      `json:"state_no"`
-	CountryNo   string      `json:"country_no"`
-	Email       string      `json:"email"`
-	Phone       string      `json:"phone"`
-	Label       string      `json:"label"`
+	Consignee   string      `json:"consignee" gorm:"type:varchar(255)"`
+	AddressType int         `json:"address_type" gorm:"type:tinyint"`
+	Name        string      `json:"name" gorm:"type:tinyint"`
+	Gender      Gender      `json:"gender" gorm:"type:varchar(255)"`
+	CompanyName string      `json:"company_name" gorm:"type:varchar(255)"`
+	Address1    string      `json:"address1" gorm:"type:varchar(255)"`
+	Address2    string      `json:"address2" gorm:"type:varchar(255)"`
+	Postcode    string      `json:"postcode" gorm:"type:varchar(255)"`
+	Street      string      `json:"street" gorm:"type:varchar(255)"`
+	Area        string      `json:"area" gorm:"type:varchar(255)"`
+	City        string      `json:"city" gorm:"type:varchar(255)"`
+	State       string      `json:"state" gorm:"type:varchar(255)"`
+	Country     string      `json:"country" gorm:"type:varchar(255)"`
+	AreaNo      string      `json:"area_no" gorm:"type:bigint(20)"`
+	CityNo      string      `json:"city_no" gorm:"type:bigint(20)"`
+	StateNo     string      `json:"state_no" gorm:"type:bigint(20)"`
+	CountryNo   string      `json:"country_no" gorm:"type:bigint(20)"`
+	Email       string      `json:"email" gorm:"type:bigint(20)"`
+	Phone       string      `json:"phone" gorm:"type:bigint(20)"`
+	Label       string      `json:"label" gorm:"type:bigint(20)"`
 	Centre      geom.Point  `json:"centre" gorm:"type:point"`
-	PostalCode  string      `json:"postal_code"`
+	PostalCode  string      `json:"postal_code" gorm:"type:bigint(20)"`
 	IsDefault   bool        `json:"is_default"`
 	Additional  interface{} `json:"additional" gorm:"type:varchar(255)"`
 }

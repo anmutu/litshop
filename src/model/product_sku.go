@@ -12,7 +12,7 @@ type ProductSku struct {
 	MainPicMediaId uint64          `json:"main_pic_media_id"`
 	Fee            uint64          `json:"fee"`
 	MarketingFee   uint64          `json:"marketing_fee"`
-	Status         types.ComStatus `json:"status"`
+	Status         types.ComStatus `json:"status" gorm:"type:integer(10)"`
 }
 
 func (*ProductSku) TableName() string {

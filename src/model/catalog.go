@@ -6,10 +6,10 @@ import "litshop/src/lvm/types"
 type Catalog struct {
 	Model
 	Pid           uint64          `json:"pid"`
-	Name          string          `json:"name"`
-	Desc          string          `json:"desc"`
-	Status        types.ComStatus `json:"status"`
-	Path          string          `json:"path"`
+	Name          string          `json:"name" gorm:"type:varchar(255)"`
+	Desc          string          `json:"desc" gorm:"type:varchar(255)"`
+	Status        types.ComStatus `json:"status" gorm:"type:integer(10)"`
+	Path          string          `json:"path" gorm:"type:varchar(255)"`
 	LogoMediaId   uint64          `json:"logo_media_id"`
 	BannerMediaId uint64          `json:"banner_media_id"`
 }
