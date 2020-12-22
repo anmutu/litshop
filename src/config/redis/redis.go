@@ -10,11 +10,15 @@ var rdb *rv8.Client
 
 func init() {
 	dsn := config.GetString("database.redis.default.host") + ":" + config.GetString("database.redis.default.port")
-	fmt.Printf("redis dsn %s\n", dsn)
+	dbNo := config.GetInt("database.redis.default.database")
+	if dbNo < 0 || dbNo > 16 {
+		dbNo = 0
+	}
 
+	fmt.Printf("redis dsn %s\n", dsn)
 	rdb = rv8.NewClient(&rv8.Options{
 		Addr: dsn,
-		DB:   0,
+		DB:   dbNo,
 	})
 }
 

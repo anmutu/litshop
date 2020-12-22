@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"litshop/api/handler"
+	"litshop/admin/handler"
 )
 
 func ApiRoutes(r *gin.Engine) {

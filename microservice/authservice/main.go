@@ -48,7 +48,7 @@ func (*AuthService) SignIn(c context.Context, in *common.Request) (*common.Respo
 		return nil, literr.NewWithCode(literr.ErrCodeInvalidRequestParams)
 	}
 
-	_, err := authentcation.SignIn(ctx, r)
+	_, err := auth.SignIn(ctx, r)
 	return nil, err
 }
 

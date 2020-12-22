@@ -1,4 +1,4 @@
-package authentcation
+package auth
 
 import (
 	"litshop/src/lvm/context"
