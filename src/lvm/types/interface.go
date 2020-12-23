@@ -7,6 +7,7 @@ type Customer interface {
 
 type HasTokener interface {
 	Token() (string, error)
+	GetId() string
 }
 
 type Jsoner interface {

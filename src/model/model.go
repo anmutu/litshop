@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
+	"litshop/src/config/mysql"
 	"time"
 )
 
@@ -18,10 +19,16 @@ type Model struct {
 	CreatedAt time.Time      `json:"created_at"`
 	UpdatedAt time.Time      `json:"updated_at"`
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"deleted_at"`
+
+	DB *gorm.DB
 }
 
 func (*Model) Connection() string {
 	return "default"
+}
+
+func (m *Model) GetDb() {
+	m.DB = mysql.GormClientByConn(m.Connection())
 }
 
 func (m *Model) Ms() map[string]interface{} {

@@ -1,6 +1,8 @@
 package runtime
 
-var shutdownHandles []func()
+var (
+	shutdownHandles []func()
+)
 
 func init() {
 	shutdownHandles = make([]func(), 10)

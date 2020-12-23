@@ -5,6 +5,7 @@ import (
 	"litshop/src/lvm/jwt"
 	"litshop/src/lvm/literr"
 	"litshop/src/lvm/types"
+	"litshop/src/pkg/util"
 )
 
 type Customer struct {
@@ -39,4 +40,8 @@ func (c *Customer) Token() (string, error) {
 	}
 
 	return token, nil
+}
+
+func (c *Customer) GetId() string {
+	return util.Interface2String(c.ID)
 }

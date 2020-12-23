@@ -67,6 +67,7 @@ const (
 	CustomerAuthTypeQQ
 	CustomerAuthTypeMax
 )
+
 const (
 	CustomerLoginStatusNormal   = 1
 	CustomerLoginStatusDisabled = 2

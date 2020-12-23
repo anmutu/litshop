@@ -12,6 +12,10 @@ func (b *CustomerRepository) init() {
 	b.DB = b.GetDb((&Customer{}).Connection())
 }
 
+func (b *CustomerRepository) Where() {
+
+}
+
 func (b *CustomerRepository) Transaction(fn func(tx *gorm.DB) error) error {
 	return b.DB.Transaction(fn)
 }
