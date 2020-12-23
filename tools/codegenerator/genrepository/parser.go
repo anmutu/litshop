@@ -16,11 +16,12 @@ type fieldConfig struct {
 }
 
 type structConfig struct {
-	config       gConfig
+	Pkgs         []ImportPkg
+	PkgName      string
+	LogName      string
 	StructName   string
 	OnlyFields   []fieldConfig
 	OptionFields []fieldConfig
-	LogName      string
 }
 
 type Parser struct {
@@ -103,7 +104,7 @@ func (p *Parser) parseTypes(file *ast.File) []structConfig {
 				if t, _ok := v.Type.(*ast.Ident); _ok {
 					if t.Name == "Model" {
 						onlyField.FieldName = "ID"
-						onlyField.FieldType = "uint"
+						onlyField.FieldType = "uint64"
 						onlyField.ColumnName = defaultNamer("ID")
 						sc.OnlyFields = append(sc.OnlyFields, onlyField)
 
@@ -125,11 +126,11 @@ func (p *Parser) parseTypes(file *ast.File) []structConfig {
 				if v.Tag != nil {
 					if strings.Contains(v.Tag.Value, "gorm") && strings.Contains(v.Tag.Value, "unique") ||
 						strings.Contains(v.Tag.Value, "primary") {
-						// type is ident, get onlyField type
+
 						if t, _ok := v.Type.(*ast.Ident); _ok {
 							onlyField.FieldType = t.String()
 						}
-						// get file name
+
 						if len(v.Names) > 0 {
 							onlyField.FieldName = v.Names[0].String()
 							onlyField.ColumnName = defaultNamer(onlyField.FieldName)

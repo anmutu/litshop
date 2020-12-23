@@ -1,5 +1,6 @@
 package model
 
+//go:generate genrepository -dir . -structs=CustomerProfile
 type CustomerProfile struct {
 	Model
 	CustomerId uint64 `json:"customer_id"`

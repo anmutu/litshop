@@ -2,6 +2,7 @@ package model
 
 import "litshop/src/lvm/types"
 
+//go:generate genrepository -dir . -structs=CustomerLogin
 type CustomerLogin struct {
 	Model
 	CustomerId uint64 `json:"customer_id"`

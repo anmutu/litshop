@@ -2,14 +2,15 @@ package main
 
 import (
 	"flag"
-	"litshop/tools/genrepository"
+	"github.com/google/martian/log"
+	"litshop/tools/codegenerator/genrepository"
 	"os"
 	"strings"
 )
 
 type conf struct {
 	dir     string
-	pkg     []string
+	pkg     []genrepository.ImportPkg
 	structs []string
 }
 
@@ -20,7 +21,10 @@ func main() {
 
 	parser := genrepository.NewParser(config.dir)
 	generator := genrepository.NewGenerator(config.dir).SetImportPkg(config.pkg)
-	generator.ParseAst(parser, config.structs).Generate().Format().Flush()
+	err := generator.ParseAst(parser, config.structs).Generate().Format().Flush()
+	if err != nil {
+		log.Errorf("flush err : %#v \n", err)
+	}
 }
 
 func parseFlags() {
@@ -30,12 +34,18 @@ func parseFlags() {
 	flag.StringVar(&paramPkgs, "pkgs", "", "导入的依赖包")
 	flag.Parse()
 
-	if paramStructs == "" || paramPkgs == "" || paramDir == "" {
+	if paramStructs == "" || paramDir == "" {
 		flag.Usage()
 		os.Exit(1)
 	}
 
 	config.dir = paramDir
 	config.structs = strings.Split(paramStructs, ",")
-	config.pkg = strings.Split(paramPkgs, ",")
+	if len(config.structs) > 0 {
+		for _, p := range strings.Split(paramPkgs, ",") {
+			config.pkg = append(config.pkg, genrepository.ImportPkg{
+				Pkg: p,
+			})
+		}
+	}
 }

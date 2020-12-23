@@ -4,6 +4,7 @@ import "golang.org/x/mobile/geom"
 
 type Gender = int
 
+//go:generate genrepository -dir . -structs=Address
 type Address struct {
 	Model
 	CustomerId  uint64      `json:"customer_id"`

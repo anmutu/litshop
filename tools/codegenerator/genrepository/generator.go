@@ -10,10 +10,14 @@ import (
 	"strings"
 )
 
+type ImportPkg struct {
+	Pkg string
+}
+
 type gConfig struct {
 	PkgName string
 	LogName string
-	Pkgs    []string
+	Pkgs    []ImportPkg
 }
 
 type Generator struct {
@@ -23,15 +27,16 @@ type Generator struct {
 	structConfigs []structConfig
 }
 
-func (g *Generator) SetImportPkg(pkg []string) *Generator {
+func (g *Generator) SetImportPkg(pkg []ImportPkg) *Generator {
 	g.config.Pkgs = pkg
 	return g
 }
 
 func (g *Generator) ParseAst(p *Parser, structs []string) *Generator {
 	for _, v := range structs {
-		g.buf[v] = new(bytes.Buffer)
+		g.buf[defaultNamer(v)] = new(bytes.Buffer)
 	}
+
 	g.structConfigs = p.Parse()
 	g.config.PkgName = p.pkg.Name
 	return g
@@ -46,17 +51,28 @@ func (g *Generator) Generate() *Generator {
 	}
 
 	for i := 0; i < len(g.structConfigs); i++ {
-		g.structConfigs[i].config = g.config
+		g.structConfigs[i].PkgName = g.config.PkgName
+		g.structConfigs[i].LogName = g.config.LogName
+		g.structConfigs[i].Pkgs = g.config.Pkgs
+	}
+
+	g.buf["common"] = &bytes.Buffer{}
+	if err := commonTemplate.Execute(g.buf["common"], g.config); err != nil {
+		panic(err)
 	}
 
 	for _, v := range g.structConfigs {
-		if _, ok := g.buf[defaultNamer(v.StructName)]; !ok {
+		_, ok := g.buf[defaultNamer(v.StructName)]
+		//fmt.Printf("ok %#v \n", ok)
+		if !ok {
 			continue
 		}
 
 		if err := modelTemplate.Execute(g.buf[defaultNamer(v.StructName)], v); err != nil {
 			panic(err)
 		}
+
+		fmt.Printf("v %#v %#v \n", v, g.buf[defaultNamer(v.StructName)].String())
 	}
 
 	return g
@@ -66,6 +82,7 @@ func (g *Generator) Format() *Generator {
 	for k, _ := range g.buf {
 		formatedOutput, err := format.Source(g.buf[k].Bytes())
 		if err != nil {
+			fmt.Printf("err k %#v %s \n", k, string(g.buf[k].Bytes()))
 			panic(err)
 		}
 		g.buf[k] = bytes.NewBuffer(formatedOutput)
@@ -76,6 +93,7 @@ func (g *Generator) Format() *Generator {
 func (g *Generator) Flush() error {
 	for k, _ := range g.buf {
 		filename := g.inputFile + "/gen_" + strings.ToLower(k) + ".go"
+
 		if err := ioutil.WriteFile(filename, g.buf[k].Bytes(), 0777); err != nil {
 			log.Fatalln(err)
 		}

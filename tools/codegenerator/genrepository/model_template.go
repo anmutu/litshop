@@ -5,28 +5,33 @@ import (
 	"text/template"
 )
 
-func parseModelTemplateOrPanic(t string) *template.Template {
-	tpl, err := template.New("model_template").Parse(t)
+func parseModelTemplateOrPanic(m string) *template.Template {
+	tpl, err := template.New("model_template").Parse(m)
 	if err != nil {
 		panic(err)
 	}
 	return tpl
 }
 
+var commonTemplate = parseModelTemplateOrPanic(fmt.Sprintf(`
+package {{.PkgName}}
+type FieldData struct {
+		Value interface{} %sjson:"value" form:"value"%s
+		Symbol string %sjson:"symbol" form:"symbol"%s
+	
+}
+`, "`", "`", "`", "`"))
+
 var modelTemplate = parseModelTemplateOrPanic(fmt.Sprintf(`
 package {{.PkgName}}
 
 {{$LogName := .LogName}}
 
-import (
-	{{range .ImportPkgs}}
-	"{{.Pkg}}"
-	{{end}}
-)
-
-type {{.StructName}} struct {
-	DB *gorm.DB
-}
+{{range .Pkgs}}
+{{ if .Pkg }}
+import "{{.Pkg}}"
+{{end}}
+{{end}}
 
 	// New{{.StructName}} new
 	func New{{.StructName}}() *{{.StructName}} {
@@ -34,24 +39,24 @@ type {{.StructName}} struct {
 	}
 
 	// init
-	func (t *{{.StructName}}) init()(err error) {
-		t.InitDB()
-		return t
+	func (m *{{.StructName}}) init() *{{.StructName}} {
+		m.InitDB()
+		return m
 	}
 
 	// Add add one record
-	func (t *{{.StructName}}) Save()(err error) {
+	func (m *{{.StructName}}) Save()(err error) {
 		return 
 	}
 
 	// Delete delete record
-	func (t *{{.StructName}}) Delete()(err error) {
+	func (m *{{.StructName}}) Delete()(err error) {
 		return
 	}
 	
 	// Updates update record
-	func (t *{{.StructName}}) Updates(m map[string]interface{})(err error) {
-		if err = t.DB.Model(&{{.StructName}}{}).Where("id = ?",t.ID).Updates(m).Error;err!=nil{
+	func (m *{{.StructName}}) Updates(updateOpt map[string]interface{})(err error) {
+		if err = m.DB.Model(&{{.StructName}}{}).Where("id = ?",m.ID).Updates(updateOpt).Error;err!=nil{
 			{{if $LogName}} {{ $LogName}}.Errorln(err) {{end}}
 			return
 		}
@@ -59,8 +64,8 @@ type {{.StructName}} struct {
 	}
 
 	// Get{{.StructName}}All get all record
-	func Get{{.StructName}}All()(ret []*{{.StructName}},err error){
-		if err = t.DB.Find(&ret).Error;err!=nil{
+	func (m *{{.StructName}}) Get{{.StructName}}All()(ret []*{{.StructName}},err error){
+		if err = m.DB.Find(&ret).Error;err!=nil{
 			{{if $LogName}} {{ $LogName}}.Errorln(err) {{end}}
 			return
 		}
@@ -68,8 +73,8 @@ type {{.StructName}} struct {
 	}
 	
 	// Get{{.StructName}}Count get count
-	func Get{{.StructName}}Count()(ret int64){
-		t.db.Model(&{{.StructName}}{}).Count(&ret)
+	func (m *{{.StructName}}) Get{{.StructName}}Count()(ret int64){
+		m.DB.Model(&{{.StructName}}{}).Count(&ret)
 		return
 	}
 
@@ -82,8 +87,8 @@ type {{.StructName}} struct {
 		}
 
 	//  Get{{$StructName}}List get {{$StructName}} list some field value or some condition
-	func Get{{$StructName}}List(q *Query{{$StructName}}Form)(ret []*{{$StructName}},err error){
-		db := t.DB
+	func (m *{{.StructName}}) Get{{$StructName}}List(q *Query{{$StructName}}Form)(ret []*{{$StructName}},err error){
+		db := m.DB
 		// order
 		if len(q.Order)>0{
 			for _,v:=range q.Order {
@@ -111,21 +116,21 @@ type {{.StructName}} struct {
 	}
 	{{range .OnlyFields}}
 		// QueryBy{{.FieldName}} query cond by {{.FieldName}}
-		func (t *{{$StructName}}) SetQueryBy{{.FieldName}}({{.ColumnName}} {{.FieldType}})*{{$StructName}} {
-			t.{{.FieldName}} = {{.ColumnName}}
-			return  t
+		func (m *{{$StructName}}) SetQueryBy{{.FieldName}}({{.ColumnName}} {{.FieldType}})*{{$StructName}} {
+			m.{{.FieldName}} = {{.ColumnName}}
+			return m
 		}
 		// GetBy{{.FieldName}} get one record by {{.FieldName}}
-		func (t *{{$StructName}})GetBy{{.FieldName}}()(err error){
-			if err = t.db.First(t,"{{.ColumnName}} = ?",t.{{.FieldName}}).Error;err!=nil{
+		func (m *{{$StructName}})GetBy{{.FieldName}}()(err error){
+			if err = m.DB.First(m,"{{.ColumnName}} = ?",m.{{.FieldName}}).Error;err!=nil{
 				{{if $LogName}} {{ $LogName}}.Errorln(err) {{end}}
 				return
 			}
 			return
 		}
 		// DeleteBy{{.FieldName}} delete record by {{.FieldName}}
-		func (t *{{$StructName}}) DeleteBy{{.FieldName}}()(err error) {
-			if err= t.db.Delete(t,"{{.ColumnName}} = ?",t.{{.FieldName}}).Error;err!=nil{
+		func (m *{{$StructName}}) DeleteBy{{.FieldName}}()(err error) {
+			if err= m.DB.Delete(m,"{{.ColumnName}} = ?",m.{{.FieldName}}).Error;err!=nil{
 				{{if $LogName}} {{ $LogName}}.Errorln(err) {{end}}
 				return
 				}

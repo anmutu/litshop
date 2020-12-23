@@ -27,7 +27,7 @@ func (*Model) Connection() string {
 	return "default"
 }
 
-func (m *Model) GetDb() {
+func (m *Model) InitDB() {
 	m.DB = mysql.GormClientByConn(m.Connection())
 }
 

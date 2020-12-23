@@ -8,6 +8,7 @@ import (
 	"litshop/src/pkg/util"
 )
 
+//go:generate genrepository -dir . -structs=Customer
 type Customer struct {
 	Model
 
@@ -33,8 +34,8 @@ func (*Customer) TableName() string {
 	return "customer"
 }
 
-func (c *Customer) Token() (string, error) {
-	token, err := jwt.GenJwtToken(c)
+func (m *Customer) Token() (string, error) {
+	token, err := jwt.GenJwtToken(m)
 	if err != nil {
 		return "", literr.NewWithCode(literr.ErrCodeInternalError)
 	}
@@ -42,6 +43,6 @@ func (c *Customer) Token() (string, error) {
 	return token, nil
 }
 
-func (c *Customer) GetId() string {
-	return util.Interface2String(c.ID)
+func (m *Customer) GetId() string {
+	return util.Interface2String(m.ID)
 }
