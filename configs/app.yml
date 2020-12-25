@@ -1,0 +1,62 @@
+admin:
+  app_name: litshop-admin
+  app_domain: localhost
+  ssl_enable: false
+  env: local
+  port: 8200
+
+api:
+  app_name: litshop
+  app_domain: localhost
+  ssl_enable: false
+  env: local
+  port: 8100
+
+jwt:
+  pubkey: src/config/keypair/rsa.pub
+
+lang: zh-CN
+
+database:
+  etcd:
+    default:
+      host: localhost
+      port: 2379
+
+  mysql:
+    default:
+      name: litshop
+      host: localhost
+      port: 3306
+      user: root
+      password: root
+    customer:
+      name: litshop_customer
+      host: localhost
+      port: 3306
+      user: root
+      password: root
+    admin:
+      name: litshop_admin
+      host: localhost
+      port: 3306
+      user: root
+      password: root
+
+  redis:
+    default:
+      host: redis
+      port: 6379
+      database: 9
+
+filesystem:
+  driver: oss
+
+  oss:
+    default:
+      endpoint:
+      endpoint_internal:
+      endpoint_internal_vpc:
+      access_key_id:
+      access_key_secret:
+      bucket:
