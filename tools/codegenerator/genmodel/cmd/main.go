@@ -3,14 +3,14 @@ package main
 import (
 	"flag"
 	"github.com/google/martian/log"
-	"litshop/tools/codegenerator/genrepository"
+	"litshop/tools/codegenerator/genmodel"
 	"os"
 	"strings"
 )
 
 type conf struct {
 	dir     string
-	pkg     []genrepository.ImportPkg
+	pkg     []genmodel.ImportPkg
 	structs []string
 }
 
@@ -19,8 +19,8 @@ var config = conf{}
 func main() {
 	parseFlags()
 
-	parser := genrepository.NewParser(config.dir)
-	generator := genrepository.NewGenerator(config.dir).SetImportPkg(config.pkg)
+	parser := genmodel.NewParser(config.dir)
+	generator := genmodel.NewGenerator(config.dir).SetImportPkg(config.pkg)
 	err := generator.ParseAst(parser, config.structs).Generate().Format().Flush()
 	if err != nil {
 		log.Errorf("flush err : %#v \n", err)
@@ -43,7 +43,7 @@ func parseFlags() {
 	config.structs = strings.Split(paramStructs, ",")
 	if len(config.structs) > 0 {
 		for _, p := range strings.Split(paramPkgs, ",") {
-			config.pkg = append(config.pkg, genrepository.ImportPkg{
+			config.pkg = append(config.pkg, genmodel.ImportPkg{
 				Pkg: p,
 			})
 		}

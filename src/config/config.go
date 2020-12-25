@@ -7,62 +7,65 @@ import (
 	"os"
 )
 
-var staticConfig *viper.Viper
+var (
+	err error
+	v   *viper.Viper
+)
 
 func init() {
-	var err error
-	v := viper.New()
-
+	v = viper.New()
 	v.SetConfigType("yml")
-	v.SetConfigName("env")
-	v.AddConfigPath(path.RootPath())
+	v.SetConfigName("app")
+
+	p := fmt.Sprintf("%s/%s", path.RootPath(), "configs")
+	fmt.Println("conf path", p)
+	v.AddConfigPath(p)
 
 	err = v.ReadInConfig()
 	if err != nil {
 		fmt.Printf("parse configuration file err %#v\n", err)
+		os.Exit(1)
 	}
 
-	staticConfig = v
-}
-
-func Get() *viper.Viper {
-	return staticConfig
+	if v.GetBool("watch") {
+		v.WatchConfig()
+	}
 }
 
 func GetNormal(key string) interface{} {
-	return staticConfig.Get(key)
+	return v.Get(key)
 }
 
 func GetBool(key string) bool {
-	return staticConfig.GetBool(key)
+	return v.GetBool(key)
 }
 
 func GetString(key string) string {
-	return staticConfig.GetString(key)
+	return v.GetString(key)
 }
 
 func GetStringSlice(key string) []string {
-	return staticConfig.GetStringSlice(key)
+	return v.GetStringSlice(key)
 }
 
 func GetInt(key string) int {
-	return staticConfig.GetInt(key)
+	return v.GetInt(key)
 }
 
 func GetFloat64(key string) float64 {
-	return staticConfig.GetFloat64(key)
+	return v.GetFloat64(key)
 }
 
 func GetInt64(key string) int64 {
-	return staticConfig.GetInt64(key)
+	return v.GetInt64(key)
 }
 
 func GetInt32(key string) int32 {
-	return staticConfig.GetInt32(key)
+	return v.GetInt32(key)
 }
 
 func GetMap(key string) map[string]interface{} {
-	return staticConfig.GetStringMap(key)
+	return v.GetStringMap(key)
 }
 
 func GetEnv(key, defaultValue string) string {

@@ -18,11 +18,16 @@ func RootPath() string {
 	}()
 
 	path, _ = os.Getwd()
+
+	fmt.Println("root path", path)
+
 	return path
 }
 
 func RootPathWithPostfix(p string) string {
-	return RootPath() + "/" + p
+	d := RootPath() + "/" + p
+	fmt.Println("root path", d)
+	return d
 }
 
 func StoragePath() string {

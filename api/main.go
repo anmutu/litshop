@@ -3,54 +3,25 @@ package main
 import (
 	"litshop/api/routes"
 	_ "litshop/src/bootstrap"
-	"litshop/src/lvm/runtime"
 	"litshop/src/pkg/logger"
+	"litshop/src/pkg/server"
 )
 
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"litshop/src/config"
-	"os"
-	"os/signal"
 )
 
 var (
-	host string
-	r    *gin.Engine
+	addr string
 )
 
-func setupGin() {
-	gin.DisableConsoleColor()
-
-	if config.GetString("env") == "prod" {
-		gin.SetMode(gin.ReleaseMode)
-	}
-
-	r = gin.New()
-}
-
-func signalListen() {
-	c := make(chan os.Signal)
-
-	signal.Notify(c, os.Interrupt, os.Kill)
-	for {
-		s := <-c
-		fmt.Println("get signal:", s)
-
-		// 结束
-		runtime.ShutDown()
-
-		os.Exit(0)
-	}
-}
-
 func main() {
-	host = fmt.Sprintf(":%d", config.GetInt("port"))
-	setupGin()
+	addr = fmt.Sprintf("%s:%d", config.GetString("api.host"), config.GetInt("api.port"))
+	r := server.InitGinHttpServer()
 	r.Use(gin.Logger())
 	routes.ApiRoutes(r)
-	go signalListen()
-	logger.Info("app running on ", host)
-	_ = r.Run(host)
+	logger.Info("app running on ", addr)
+	_ = r.Run(addr)
 }

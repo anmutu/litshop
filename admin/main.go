@@ -1,56 +1,32 @@
 package main
 
 import (
-	"litshop/admin/routes"
-	_ "litshop/src/bootstrap"
-	"litshop/src/lvm/runtime"
-	"litshop/src/pkg/logger"
-)
-
-import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"litshop/admin/routes"
+	_ "litshop/src/bootstrap"
 	"litshop/src/config"
-	"os"
-	"os/signal"
+	"litshop/src/lvm/runtime"
+	"litshop/src/pkg/logger"
+	"litshop/src/pkg/server"
 )
+
+func init() {
+	runtime.SetRunApp("admin")
+}
 
 var (
-	host string
-	r    *gin.Engine
+	addr string
 )
 
-func setupGin() {
-	gin.DisableConsoleColor()
-
-	if config.GetString("env") == "prod" {
-		gin.SetMode(gin.ReleaseMode)
-	}
-
-	r = gin.New()
-}
-
-func signalListen() {
-	c := make(chan os.Signal)
-
-	signal.Notify(c, os.Interrupt, os.Kill)
-	for {
-		s := <-c
-		fmt.Println("get signal:", s)
-
-		// 结束
-		runtime.ShutDown()
-
-		os.Exit(0)
-	}
-}
-
 func main() {
-	host = fmt.Sprintf(":%d", config.GetInt("port"))
-	setupGin()
+	addr = fmt.Sprintf("%s:%d", config.GetString("admin.host"), config.GetInt("admin.port"))
+
+	r := server.InitGinHttpServer()
 	r.Use(gin.Logger())
+
 	routes.ApiRoutes(r)
-	go signalListen()
-	logger.Info("app running on ", host)
-	_ = r.Run(host)
+
+	logger.Info("app running on ", addr)
+	_ = r.Run(addr)
 }

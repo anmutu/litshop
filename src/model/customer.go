@@ -8,7 +8,7 @@ import (
 	"litshop/src/pkg/util"
 )
 
-//go:generate genrepository -dir . -structs=Customer
+//go:generate genmodel -dir . -structs=Customer
 type Customer struct {
 	Model
 

@@ -1,4 +1,4 @@
-package genrepository
+package genmodel
 
 import (
 	"bytes"

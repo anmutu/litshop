@@ -1,21 +1,28 @@
 package runtime
 
-var (
+type RunTime struct {
 	shutdownHandles []func()
+	RunApp          string
+}
+
+var (
+	R = RunTime{}
 )
 
-func init() {
-	shutdownHandles = make([]func(), 10)
+func SetRunApp(s string) {
+	R.RunApp = s
 }
 
 func RegisterShutdown(f func()) {
-	shutdownHandles = append(shutdownHandles, f)
+	R.shutdownHandles = append(R.shutdownHandles, f)
 }
 
 func ShutDown() {
-	if len(shutdownHandles) > 0 {
-		for _, f := range shutdownHandles {
-			go f()
+	if len(R.shutdownHandles) > 0 {
+		for _, f := range R.shutdownHandles {
+			if f != nil {
+				f()
+			}
 		}
 	}
 }

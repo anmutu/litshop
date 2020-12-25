@@ -2,12 +2,14 @@ package jwt
 
 import (
 	"context"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/uniplaces/carbon"
 	"io/ioutil"
 	"litshop/src/config"
 	"litshop/src/config/redis"
 	"litshop/src/lvm/literr"
+	"litshop/src/lvm/runtime"
 	"litshop/src/lvm/types"
 	"litshop/src/pkg/logger"
 	"litshop/src/pkg/path"
@@ -16,11 +18,10 @@ import (
 	"time"
 )
 
-var secret []byte
-var rds = redis.Get()
-
-const (
-	cachePrefix = "litshop:jwt:"
+var (
+	secret      []byte
+	rds         = redis.Get()
+	cachePrefix = fmt.Sprintf("litshop:%sjwt:", runtime.R.RunApp)
 )
 
 func init() {

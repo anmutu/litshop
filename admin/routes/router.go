@@ -6,5 +6,10 @@ import (
 )
 
 func ApiRoutes(r *gin.Engine) {
-	r.GET("echo", controller.EchoHandler)
+	r.GET("echo", controller.CtrlWrapper(controller.HealthCheck))
+
+	authR := r.Group("/auth")
+	{
+		authRoutes(authR)
+	}
 }

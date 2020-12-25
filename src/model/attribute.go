@@ -2,7 +2,7 @@ package model
 
 import "litshop/src/lvm/types"
 
-//go:generate genrepository -dir . -structs=Address
+//go:generate genmodel -dir . -structs=Address
 type Attribute struct {
 	Model
 	Code             string              `json:"code" gorm:"type:varchar(255)"`
